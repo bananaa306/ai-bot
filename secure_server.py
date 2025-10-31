@@ -321,11 +321,6 @@ def get_history():
         logger.error(f"History Error: {e}")
         return jsonify({'error': 'Failed to get history'}), 500
 
-@app.route('/health', methods=['GET'])
-def health_check():
-    """Health check endpoint"""
-    return jsonify({'status': 'healthy', 'timestamp': datetime.utcnow().isoformat()})
-
 @app.errorhandler(429)
 def ratelimit_handler(e):
     return jsonify({'error': 'Rate limit exceeded. Please slow down.'}), 429
