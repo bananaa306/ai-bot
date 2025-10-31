@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralTalk</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- KaTeX for LaTeX rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        // Initialize KaTeX when page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log('DOM loaded, KaTeX version:', typeof katex !== 'undefined' ? katex.version : 'not loaded');
+            console.log('renderMathInElement available:', typeof renderMathInElement !== 'undefined');
+        });
+    </script>
+</head>
+<body>
+    <div class="container">        
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="sidebar-content">
+                <!-- Header inside sidebar -->
+                <div class="header">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <span class="custom-n">N</span>
+                        </div>
+                        <div class="logo-text">
+                            <h1>NeuralTalk</h1>
+                            <span class="logo-tagline">AI</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="history-dropdown">
+                    <button class="history-toggle" id="historyToggle">
+                        📚 Chat History
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="history-list" id="historyList">
+                        <div id="historyContent">
+                            <p>No chat history yet. Start a conversation!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="clear-button-bottom" id="clearHistoryButton">
+                    🗑️ Clear History
+                </button>
+            </div>
+        </div>
+        
+        <!-- Right Chat Area -->
+        <div class="chat-container">
+            <div id="chatHistory" class="chat-history">
+                <!-- Messages will be dynamically added here -->
+            </div>
+        </div>
+        
+        <!-- Input Area (bottom right) -->
+        <div class="input-container">
+            <button id="toggleHistoryButton" style="display: none;">☰ History</button>
+            <input type="text" id="userInput" placeholder="Type your message and press Enter..." autocomplete="off">
+            <button id="clearButton" style="display: none;">Clear</button>
+        </div>
+        
+        <!-- Old History Sidebar (hidden) -->
+        <div class="history-overlay" id="historyOverlay" style="display: none;"></div>
+        <div class="history-sidebar" id="historySidebar" style="display: none;">
+            <div class="history-header">
+                <h3>Chat History</h3>
+                <button class="close-history" id="closeHistory">✕ Close</button>
+            </div>
+            <div class="history-content">
+                <p>No chat history yet. Start a conversation!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js?v=2"></script>
+</body>
+</html>

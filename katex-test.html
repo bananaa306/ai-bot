@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KaTeX Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #1a1a1a; 
+            color: #fff; 
+        }
+        .test-equation {
+            margin: 20px 0;
+            padding: 20px;
+            background: #333;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>KaTeX Math Rendering Test</h1>
+    
+    <div class="test-equation">
+        <h3>Inline Math Test:</h3>
+        <p>Einstein's famous equation: $E = mc^2$</p>
+    </div>
+    
+    <div class="test-equation">
+        <h3>Display Math Test:</h3>
+        <p>The quadratic formula:</p>
+        $$x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}$$
+    </div>
+    
+    <div class="test-equation">
+        <h3>Complex Math Test:</h3>
+        $$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log('KaTeX version:', katex.version);
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+            console.log('Math rendering completed');
+        });
+    </script>
+</body>
+</html>

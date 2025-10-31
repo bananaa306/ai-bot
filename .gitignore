@@ -1,0 +1,9 @@
+# Add these to your .gitignore file
+.env
+*.key
+web_conversation_history.json
+__pycache__/
+*.pyc
+.DS_Store
+node_modules/
+.vscode/settings.json
