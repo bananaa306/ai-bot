@@ -39,8 +39,10 @@ limiter = Limiter(
 groq_api_key = os.getenv('GROQ_API_KEY')
 if not groq_api_key:
     logger.error("GROQ_API_KEY environment variable not set!")
+    logger.error("Please set your Groq API key in Railway environment variables")
     raise ValueError("Missing GROQ_API_KEY environment variable")
 
+logger.info("Groq API key loaded successfully")
 client = groq.Groq(api_key=groq_api_key)
 
 # File to store conversation history
@@ -213,15 +215,34 @@ def generate_response_with_params(user_prompt, max_tokens, temperature):
         logger.error(f"Error generating response: {e}")
         return "I apologize, but I'm experiencing technical difficulties. Please try again later."
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint for Railway"""
+    return jsonify({
+        'status': 'healthy', 
+        'timestamp': datetime.utcnow().isoformat(),
+        'service': 'NeuralTalk AI Bot'
+    }), 200
+
 @app.route('/')
 def index():
     """Serve the main HTML file"""
-    return send_from_directory('.', 'index.html')
+    try:
+        return send_from_directory('.', 'index.html')
+    except Exception as e:
+        logger.error(f"Error serving index.html: {e}")
+        return jsonify({'error': 'Could not load application'}), 500
 
 @app.route('/<path:filename>')
 def static_files(filename):
     """Serve static files"""
-    return send_from_directory('.', filename)
+    try:
+        return send_from_directory('.', filename)
+    except Exception as e:
+        logger.error(f"Error serving {filename}: {e}")
+        if filename.endswith('.html'):
+            return jsonify({'error': 'Page not found'}), 404
+        return jsonify({'error': 'File not found'}), 404
 
 @app.route('/api/chat', methods=['POST'])
 @limiter.limit("10 per minute")  # Additional rate limiting for chat endpoint
@@ -319,15 +340,22 @@ def internal_error_handler(e):
     return jsonify({'error': 'Internal server error'}), 500
 
 if __name__ == '__main__':
-    # Check if running in production
-    is_production = os.getenv('FLASK_ENV') == 'production' or os.getenv('RAILWAY_ENVIRONMENT_NAME') is not None
+    # Railway automatically sets PORT environment variable
     port = int(os.getenv('PORT', 5003))
     
+    # Check if running in production (Railway sets these)
+    is_production = (
+        os.getenv('FLASK_ENV') == 'production' or 
+        os.getenv('RAILWAY_ENVIRONMENT') is not None or
+        os.getenv('PORT') is not None
+    )
+    
     if is_production:
-        logger.info("Starting in PRODUCTION mode")
+        logger.info(f"Starting in PRODUCTION mode on port {port}")
+        # Railway requires binding to 0.0.0.0
         app.run(host='0.0.0.0', port=port, debug=False)
     else:
-        logger.info("Starting in DEVELOPMENT mode")
+        logger.info(f"Starting in DEVELOPMENT mode on port {port}")
         print("🤖 AI Chat Server Starting...")
         print(f"📡 Server will be available at: http://localhost:{port}")
         print("🌐 Open index.html in your browser to start chatting!")
